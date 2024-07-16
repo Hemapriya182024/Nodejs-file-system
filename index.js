@@ -8,18 +8,26 @@ const PORT = 6000; // New port number
 
 app.use(cors());
 
-app.get('/', (req, res) => { // Route for the homepage
-  res.send( 
-    `<div style="height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center">
-    <h1>Endpoint to write a file with timestamp: /writefile</h1>
-    <h1>Endpoint to read all files in the folder: /readallfiles</h1>
-    </div>`
-  );
+// Middleware to parse JSON bodies
+app.use(express.json());
+
+// Homepage route
+app.get('/', (req, res) => {
+  res.send(`
+    <div style="height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; background-color:rgba(0,0,0,.4); padding: 20px;">
+      <h1 style="color: #ffffff; font-family: Poppins;">Welcome to the File Handling API!</h1>
+      <p style="color: #ffffff; font-family: Poppins; text-align: center;">
+        <strong>Endpoint to write a file with timestamp:</strong> /writefile<br>
+        <strong>Endpoint to read all files in the folder:</strong> /readallfiles
+      </p>
+    </div>
+  `);
 });
 
-app.get('/writefile', (req, res) => { // Route to write a file
-  let currentTime = new Date(); // Get the current date and time
-  let formattedTime = format(currentTime, "dd-MM-yyyy-HH-mm-ss"); // Format the date and time
+// Route to write a file with timestamp
+app.get('/writefile', (req, res) => {
+  const currentTime = new Date();
+  const formattedTime = format(currentTime, "dd-MM-yyyy-HH-mm-ss");
   const directoryPath = 'timestamps';
   const filePath = `${directoryPath}/${formattedTime}.txt`;
 
@@ -28,20 +36,22 @@ app.get('/writefile', (req, res) => { // Route to write a file
     fs.mkdirSync(directoryPath);
   }
 
-  fs.writeFileSync(filePath, `${currentTime}`, 'utf8'); // Create a file with the current timestamp
-  res.send(`The timestamp is ${currentTime}`);
+  fs.writeFileSync(filePath, `${currentTime}`, 'utf8');
+  res.send(`File ${formattedTime}.txt created at ${currentTime}`);
 });
 
-app.get('/readallfiles', (req, res) => { // Route to read all files in the directory
+// Route to read all files in the directory
+app.get('/readallfiles', (req, res) => {
   const directoryPath = "timestamps";
   if (!fs.existsSync(directoryPath)) {
-    return res.send("Directory does not exist.");
+    return res.send("No files found.");
   }
-  const files = fs.readdirSync(directoryPath); // Get an array of file names in the directory
 
-  res.send(files); // Send the array of file names
+  const files = fs.readdirSync(directoryPath);
+  res.json(files); // Send the array of file names as JSON
 });
 
-app.listen(PORT, () => { // Start the server
+// Start the server
+app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
