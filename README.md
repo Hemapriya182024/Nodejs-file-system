@@ -1,4 +1,4 @@
-"# Nodejs-file-system" 
+
 
 # Node.js Express File Handling Server
 
@@ -53,9 +53,14 @@ Ensure you have the following installed on your system:
 - **Route:** `/writefile`
 - **Method:** GET
 - **Description:** Writes the current timestamp to a text file in the `timestamps` directory.
-- **Example Response:**
+- **Example Response:** (if successful)
   ```
-  The timestamp is Sat Jul 13 2024 17:30:00 GMT+0000 (Coordinated Universal Time)
+  File successfully written: 13-07-2024-17-30-00.txt
+  ```
+
+  **Example Response:** (if directory does not exist and is created)
+  ```
+  Directory created. File successfully written: 13-07-2024-17-30-00.txt
   ```
 
 ### 3. Read All Files
@@ -63,10 +68,19 @@ Ensure you have the following installed on your system:
 - **Route:** `/readallfiles`
 - **Method:** GET
 - **Description:** Retrieves a list of all filenames in the `timestamps` directory.
-- **Example Response:**
+- **Example Response:** (if files exist)
   ```
   ["13-07-2024-17-30-00.txt", "13-07-2024-17-32-15.txt", ...]
   ```
+
+  **Example Response:** (if no files exist)
+  ```
+  No files found.
+  ```
+
+## Deployment
+
+This application is deployed on [Render.com](https://nodejs-file-system-2.onrender.com/). You can access it [here](https://nodejs-file-system-2.onrender.com/).
 
 ## Directory Structure
 
